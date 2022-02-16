@@ -126,4 +126,5 @@ int main(int argc, char* argv)
 	free(short_str);
 	memdump();
 	return EXIT_SUCCESS;
+	
 }
