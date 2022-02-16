@@ -1,5 +1,5 @@
 void *mymalloc(size_t size, char *file, int line);
-void free(void *ptr, char *file, int line);
+void myfree(void *ptr, char *file, int line);
 void mumdump();
 
 #define malloc(s) mymalloc(s, __FILE__, __LINE__)

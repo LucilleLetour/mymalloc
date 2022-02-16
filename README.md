@@ -6,3 +6,6 @@ Implement a version of `malloc()` and `free()` in the C programming language. Th
 global `memory` array. The `free()` function will also contain some warnings that the standard `free()` does not 
 give, like trying to free a pointer twice, freeing a pointer that is not the head of a chunk of data, and trying 
 to free an address not obtained by malloc.
+
+## Stress Testing
+Tests 4 and 5 are of our own design, the first 3 come from 

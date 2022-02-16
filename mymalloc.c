@@ -8,9 +8,6 @@ printf("Null pointer at " __FILE__ ":%d\n", __LINE__); \
 exit(EXIT_FAILURE);\
 }
 
-//#define malloc(p) mymalloc(p, __FILE__, __LINE__)
-//#define free(p) myfree(p)
-
 static char memory[MEMSIZE];
 
 typedef enum { false, true } bool;
@@ -57,17 +54,60 @@ void* mymalloc(int p, char* file, int line) {
 	return NULL;
 }
 
-void memdump() {
+void myfree(int* p, char* file, int line)
+{
+	meta* metaPrev = NULL;
+	meta* metaCurr = &memory;
+	if(metaCurr->chunk_size == 0)
+	{
+		printf("Nothing is There\n");
+		return;
+	}
+	for(;metaCurr < (char*)(&memory + MEMSIZE); metaCurr = (char*)((char*)metaCurr + sizeof(meta) + metaCurr->chunk_size))
+	{
+		unsigned int addressCheking = (char*)((char*)metaCurr + sizeof(meta));
+		printf("current meta address: %u \n", metaCurr);
+		//printf("size of meta: %u \n", sizeof(meta));
+		printf("checking address in loop to p: %u, %u\n", addressCheking, p);
+		//printf("\n", addressCheking, p);
+		if(addressCheking == (unsigned int)p)
+		{
+			printf("found location\n");
+			metaCurr->is_reserved = false;
+			meta* metaNext = (char*)((char*)metaCurr + sizeof(meta) + metaCurr->chunk_size);
+			if(metaPrev != NULL && metaPrev->is_reserved == false)
+			{
+				metaPrev->chunk_size += sizeof(meta) + metaCurr->chunk_size;
+			}
+			if(metaNext < &memory + MEMSIZE)
+			{	
+				if(metaPrev != NULL && metaPrev->is_reserved==false && metaNext->is_reserved==false)
+				{
+					metaPrev->chunk_size += sizeof(meta) + metaNext->chunk_size;
+				}
+				else if(metaNext->is_reserved==false)
+				{
+					metaCurr->chunk_size += sizeof(meta) + metaNext->chunk_size;
+				}
+			}
+			return;
+		}
+	}
+	printf("Not a valid pointer\n");
+}
+
+void memdump() 
+{
 	for(int i = 0; i < MEMSIZE; i++) {
 		printf("%d\n", memory[i]);
 	}
 }
 
-void myfree(void* ptr, char* file, int line) {
-	free(ptr);
-}
 
-int main2(int argc, char* argv) {
+int main(int argc, char* argv) 
+{
+	unsigned int* memStart = memory;
+	free(memStart);
 	char* short_str = malloc(sizeof(char) * 6);
 	short_str[0] = 'H';
 	short_str[1] = 'e';
@@ -77,5 +117,9 @@ int main2(int argc, char* argv) {
 	short_str[5] = '\0';
 	printf("===MEMDUMPING===\n");
 	memdump();
+	printf("freeing: %u \n",short_str);
+	free(short_str);
+	memdump();
 	return EXIT_SUCCESS;
+
 }
