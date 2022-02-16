@@ -109,9 +109,6 @@ void memdump()
 int main(int argc, char* argv) 
 {
 	unsigned int* memStart = memory;
-	printf("memory location: %u\n", memStart);
-	printf("memory amou t: %u\n", MEMSIZE);
-	printf("memory end: %u\n", (char*)((char*)memory + MEMSIZE));
 	free(memStart);
 	char* short_str = malloc(sizeof(char) * 6);
 	short_str[0] = 'H';
