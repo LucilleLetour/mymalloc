@@ -1,14 +1,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define MEMSIZE 32
+#define MEMSIZE 4096
 
 #define check(p) if(p == NULL) {\
 printf("Null pointer at " __FILE__ ":%d\n", __LINE__); \
 exit(EXIT_FAILURE);\
 }
 
-#define malloc(p) mymalloc(p, __FILE__, __LINE__)
+//#define malloc(p) mymalloc(p, __FILE__, __LINE__)
+//#define free(p) myfree(p)
 
 static char memory[MEMSIZE];
 
@@ -20,7 +21,7 @@ typedef struct meta {
 } meta;
 
 void* mymalloc(int p, char* file, int line) {
-	printf(__FILE__ "at line: %d\n", __LINE__);
+	//printf(__FILE__ " at line: %d\n", __LINE__);
 	// Goal: find first available free chunk with adequate size
 	int curLoc = 0;
 	meta* metaBlock = &memory[curLoc];
@@ -62,7 +63,11 @@ void memdump() {
 	}
 }
 
-int main(int argc, char* argv) {
+void myfree(void* ptr, char* file, int line) {
+	free(ptr);
+}
+
+int main2(int argc, char* argv) {
 	char* short_str = malloc(sizeof(char) * 6);
 	short_str[0] = 'H';
 	short_str[1] = 'e';

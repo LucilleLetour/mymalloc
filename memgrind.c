@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define USE_STD_MALLOC
+//#define USE_STD_MALLOC
 
 #ifndef USE_STD_MALLOC
 	#include "mymalloc.h"
@@ -29,6 +29,7 @@ void test2() {
 
 	for(int i = 0; i < 120; i++) {
 		ptrs[i] = (char*)malloc(sizeof(char));
+		printf("%d\n", i);
 	}
 
 	for(int i = 0; i < 120; i++) {
