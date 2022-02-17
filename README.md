@@ -8,7 +8,10 @@ give, like trying to free a pointer twice, freeing a pointer that is not the hea
 to free an address not obtained by malloc.
 
 
+## Meta Tag Implementation ##
+In order to maximize the amount of memory used on the memory array, the smallest amount of data types were used for the meta tag. Char data type was used to determine if a meta tag for a chunk was used or freed. Short data type was used to record how many bytes were allocated for the meta tag chunk. Since short can cover up to 32,767 (or 65,535 if unsigned), it is enough for 4096.
 
+## Malloc Implementation ##
 
 ## Free Implementation ##
 For this implementation of `free()`, a simple for loop was used to go through the memory array and determine if the given address is a valid pointer to be freed. If the given parameter is not a valid pointer given by malloc, it will print an error message accordingly. The loop begins from the start of the memory + sizeof(meta) address and advances to the next meta data tag by the current chunk size amount. While going through the loop, it keeps a pointer of the previous, current, and next meta tags to be used later in the coalesce process. 
