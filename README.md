@@ -25,6 +25,6 @@ Use `malloc()` to get 120 1-byte chunks, storing the pointers in an array, then 
 ### Test3 ###
 Allocating a 1-byte chunk and storing the pointer in an array
 ### Test4 ###
-Allocating random size byte chunks until failure and freeing all random size byte chunks
+Allocating random size byte chunks until failure and freeing the random size byte chunks randomly
 ### Test5 ###
 Allocating a n-byte chunks until failure and freeing every other pointer where n = 0 to MEMSIZE (4096)
