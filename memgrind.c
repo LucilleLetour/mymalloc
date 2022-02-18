@@ -52,13 +52,59 @@ void test3() {
 	}
 }
 
-// Custom test #1
-void test4() {
-	
+int empty(char* ptrs[],int index)
+{
+	for(int i =0; i<index;i++)
+	{
+		if(ptrs[i]!=0)
+		{
+			return 1;
+		}
+	}
+	return 0;
 }
 
+// Custom test #1
+void test4() 
+{
+	char* ptrs[4096];
+	int index = 0;
+	int length = rand() % 30 +1;
+	char* pointer = (char*)malloc(length);
+	while(pointer!=NULL)
+	{
+		ptrs[index++] == pointer;
+		length = rand() % 30 +1;
+		pointer = (char*)malloc(length);
+	}
+	pointer = (char*)malloc(sizeof(char));
+	while(pointer!=NULL)
+	{
+		ptrs[index++] == pointer;
+		pointer = (char*)malloc(sizeof(char));
+	}
+	while(empty(ptrs, index)==1)
+	{
+		length = rand() % index;
+		if(ptrs[length]==NULL)
+		{
+			continue;
+		}
+		free(ptrs[length]);
+		ptrs[length]==NULL;
+	}
+	pointer = (char*)malloc(4096-3);
+	if(pointer == NULL)
+	{
+		printf("FAILED");
+	}
+}
+
+
+
 // Custom test #2
-void test5() {
+void test5() 
+{
 	
 }
 
