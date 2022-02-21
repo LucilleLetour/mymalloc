@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define MEMSIZE 4096
+#define MEMSIZE 32
 
 #define check(p) if(p == NULL) {\
 printf("Null pointer at " __FILE__ ":%d\n", __LINE__); \
@@ -17,6 +17,13 @@ typedef struct meta {
 	unsigned short chunk_size;
 } meta;
 
+void memdump() 
+{
+	for(int i = 0; i < MEMSIZE; i++) {
+		printf("%d\n", memory[i]);
+	}
+}
+
 void* mymalloc(int p, char* file, int line) {
 	//printf(__FILE__ " at line: %d\n", __LINE__);
 	// Goal: find first available free chunk with adequate size
@@ -29,6 +36,8 @@ void* mymalloc(int p, char* file, int line) {
 		printf("memory initialized\n");
 	}
 
+	memdump();
+
 	while(curLoc <= MEMSIZE) {
 		metaBlock = &memory[curLoc];
 		if(!metaBlock->is_reserved && metaBlock->chunk_size >= p) {
@@ -38,7 +47,7 @@ void* mymalloc(int p, char* file, int line) {
 				metaBlock->is_reserved = true;
 			} else {
 				// We have enough spcae for the requested chunk and another (free, for now) chunk
-				meta *metaBlock2 = &memory[curLoc + sizeof(meta) + p];
+				meta *metaBlock2 = &memory[curLoc + sizeof(meta) + p - 1];
 				metaBlock2->is_reserved = false;
 				metaBlock2->chunk_size = metaBlock->chunk_size - p - sizeof(meta);
 				metaBlock->is_reserved = true;
@@ -50,7 +59,7 @@ void* mymalloc(int p, char* file, int line) {
 			curLoc += sizeof(meta) + metaBlock->chunk_size;
 		}
 	}
-	printf("uh-oh no free memory\n");
+	printf("No free memory\n");
 	return NULL;
 }
 
@@ -95,13 +104,6 @@ void myfree(int* p, char* file, int line)
 		metaPrev = metaCurr;
 	}
 	printf("Not a valid pointer\n");
-}
-
-void memdump() 
-{
-	for(int i = 0; i < MEMSIZE; i++) {
-		printf("%d\n", memory[i]);
-	}
 }
 
 

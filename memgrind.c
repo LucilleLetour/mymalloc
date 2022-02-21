@@ -67,14 +67,15 @@ int empty(char* ptrs[],int index)
 // Custom test #1
 void test4() 
 {
-	char* ptrs[4096];
+	char* ptrs[128];
 	int index = 0;
-	int length = rand() % 30 +1;
+	int length = rand() % (120 / 10) + 1;
 	char* pointer = (char*)malloc(length);
 	while(pointer!=NULL)
 	{
+		printf("%d", &pointer);
 		ptrs[index++] == pointer;
-		length = rand() % 30 +1;
+		length = rand() % (128 / 10) + 1;
 		pointer = (char*)malloc(length);
 	}
 	pointer = (char*)malloc(sizeof(char));
@@ -83,17 +84,22 @@ void test4()
 		ptrs[index++] == pointer;
 		pointer = (char*)malloc(sizeof(char));
 	}
-	while(empty(ptrs, index)==1)
-	{
-		length = rand() % index;
-		if(ptrs[length]==NULL)
-		{
-			continue;
-		}
-		free(ptrs[length]);
-		ptrs[length]==NULL;
+	//while(empty(ptrs, index)==0)
+	//{
+	//	length = rand() % index;
+	//	if(ptrs[length]==NULL)
+	//		{
+	//		continue;
+	//	}
+	//	free(ptrs[length]);
+	//	ptrs[length]==NULL;
+	//}
+	for(int i = 0; i<index-1; i++){
+		free(ptrs[i]);
 	}
-	pointer = (char*)malloc(4096-3);
+	printf("emptied\n");
+	pointer = (char*)malloc(128 - 3);
+	memdump();
 	if(pointer == NULL)
 	{
 		printf("FAILED");
@@ -109,9 +115,16 @@ void test5()
 }
 
 int main(int argc, char* argv) {
-	printf("Test 1 average: %f μs\n", AVG_TIME(test1));
-	printf("Test 2 average: %f μs\n", AVG_TIME(test2));
-	printf("Test 3 average: %f μs\n", AVG_TIME(test3));
-	printf("Test 4 average: %f μs\n", AVG_TIME(test4));
-	printf("Test 5 average: %f μs\n", AVG_TIME(test5));
+	//printf("Test 1 average: %f μs\n", AVG_TIME(test1));
+	//printf("Test 2 average: %f μs\n", AVG_TIME(test2));
+	//printf("Test 3 average: %f μs\n", AVG_TIME(test3));
+	//printf("Test 4 average: %f μs\n", AVG_TIME(test4));
+	//printf("Test 5 average: %f μs\n", AVG_TIME(test5));
+	//test4();
+	int* ints = (int*)malloc(sizeof(int) * 3);
+	memdump();
+	printf("--------------------\n");
+	free(ints);
+	memdump();
+
 }
