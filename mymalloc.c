@@ -13,8 +13,8 @@ static char memory[MEMSIZE];
 typedef enum { false, true } bool;
 
 typedef struct meta {
-	int is_reserved;
-	int chunk_size;
+	char is_reserved;
+	unsigned short chunk_size;
 } meta;
 
 void* mymalloc(int p, char* file, int line) {
@@ -66,13 +66,13 @@ void myfree(int* p, char* file, int line)
 	for(;metaCurr < (char*)(&memory + MEMSIZE); metaCurr = (char*)((char*)metaCurr + sizeof(meta) + metaCurr->chunk_size))
 	{
 		unsigned int addressCheking = (char*)((char*)metaCurr + sizeof(meta));
-		printf("current meta address: %u \n", metaCurr);
+		//printf("current meta address: %u \n", metaCurr);
 		//printf("size of meta: %u \n", sizeof(meta));
-		printf("checking address in loop to p: %u, %u\n", addressCheking, p);
+		//printf("checking address in loop to p: %u, %u\n", addressCheking, p);
 		//printf("\n", addressCheking, p);
 		if(addressCheking == (unsigned int)p)
 		{
-			printf("found location\n");
+			//printf("found location\n");
 			metaCurr->is_reserved = false;
 			meta* metaNext = (char*)((char*)metaCurr + sizeof(meta) + metaCurr->chunk_size);
 			if(metaPrev != NULL && metaPrev->is_reserved == false)
