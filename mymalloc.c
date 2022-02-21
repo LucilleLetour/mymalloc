@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define MEMSIZE 4096
+#define MEMSIZE 32
 
 #define check(p) if(p == NULL) {\
 printf("Null pointer at " __FILE__ ":%d\n", __LINE__); \

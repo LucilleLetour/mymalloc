@@ -109,9 +109,67 @@ void test5()
 }
 
 int main(int argc, char* argv) {
-	printf("Test 1 average: %f μs\n", AVG_TIME(test1));
-	printf("Test 2 average: %f μs\n", AVG_TIME(test2));
-	printf("Test 3 average: %f μs\n", AVG_TIME(test3));
-	printf("Test 4 average: %f μs\n", AVG_TIME(test4));
-	printf("Test 5 average: %f μs\n", AVG_TIME(test5));
+	//printf("Test 1 average: %f μs\n", AVG_TIME(test1));
+	//printf("Test 2 average: %f μs\n", AVG_TIME(test2));
+	//printf("Test 3 average: %f μs\n", AVG_TIME(test3));
+	//printf("Test 4 average: %f μs\n", AVG_TIME(test4));
+	//printf("Test 5 average: %f μs\n", AVG_TIME(test5));
+	printf("first");
+	memdump();
+	printf("____\n");
+
+	char* short_str = malloc(sizeof(char) * 6);
+	printf("first %u \n", short_str);
+	short_str[0] = 'a';
+	short_str[1] = 'b';
+	short_str[2] = 'c';
+	short_str[3] = 'd';
+	short_str[4] = 'e';
+	short_str[5] = '\0';
+	memdump();
+	printf("____\n");
+
+	char* short_str2 = malloc(sizeof(char) * 6);
+	printf("second %u \n", short_str2);
+	short_str2[0] = 'a';
+	short_str2[1] = 'b';
+	short_str2[2] = 'c';
+	short_str2[3] = 'd';
+	short_str2[4] = 'e';
+	short_str2[5] = '\0';
+	memdump();
+	printf("____\n");
+
+	free(short_str);
+	memdump();
+	printf("____\n");
+
+	char* short_str3 = malloc(sizeof(char) * 5);
+	printf("third %u \n", short_str3);
+	short_str3[0] = 'a';
+	short_str3[1] = 'b';
+	short_str3[2] = 'c';
+	short_str3[3] = 'd';
+	short_str3[4] = '\0';
+	memdump();
+	printf("____\n");
+
+	free(short_str2);
+	memdump();
+	printf("____\n");
+
+
+	char* short_str4 = malloc(sizeof(char) * 5);
+	printf("fourth %u \n", short_str4);
+	short_str4[0] = 'a';
+	short_str4[1] = 'b';
+	short_str4[2] = 'c';
+	short_str4[3] = 'd';
+	short_str4[4] = '\0';
+
+	memdump();
+	printf("____\n");
+	
+	
+
 }
