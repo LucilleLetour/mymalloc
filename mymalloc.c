@@ -47,13 +47,13 @@ void* mymalloc(int p, char* file, int line) {
 				metaBlock->is_reserved = true;
 			} else {
 				// We have enough spcae for the requested chunk and another (free, for now) chunk
-				meta *metaBlock2 = &memory[curLoc + sizeof(meta) + p - 1];
+				meta *metaBlock2 = &memory[curLoc + sizeof(meta) + p];
 				metaBlock2->is_reserved = false;
 				metaBlock2->chunk_size = metaBlock->chunk_size - p - sizeof(meta);
 				metaBlock->is_reserved = true;
 				metaBlock->chunk_size = p;
 			}
-			return &memory[curLoc] + sizeof(meta);
+			return &memory[curLoc] + sizeof(meta) - sizeof(char);
 		} else {
 			//TODO: Check if this overflows over MEMSIZE
 			curLoc += sizeof(meta) + metaBlock->chunk_size;
