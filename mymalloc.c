@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#pragma pack(1)
+
 #define MEMSIZE 32
 
 #define check(p) if(p == NULL) {\
@@ -12,6 +14,10 @@ static char memory[MEMSIZE];
 
 typedef enum { false, true } bool;
 
+struct test {
+	char testchar;
+};
+
 typedef struct meta {
 	char is_reserved;
 	unsigned short chunk_size;
@@ -22,6 +28,7 @@ void memdump()
 	for(int i = 0; i < MEMSIZE; i++) {
 		printf("%d\n", memory[i]);
 	}
+	printf("--------\n");
 }
 
 void* mymalloc(int p, char* file, int line) {
@@ -32,6 +39,9 @@ void* mymalloc(int p, char* file, int line) {
 	if(metaBlock->chunk_size == 0) {
 		//This should only happened on an uninitialized memory array, intializes arr with a Meta tag defining the entire space as free
 		metaBlock->is_reserved = 0;
+		printf("%d\n", sizeof(meta));
+		printf("%d\n", sizeof(char));
+		printf("%d\n", sizeof(unsigned short));
 		metaBlock->chunk_size = MEMSIZE - sizeof(meta);
 		printf("memory initialized\n");
 	}
@@ -53,7 +63,7 @@ void* mymalloc(int p, char* file, int line) {
 				metaBlock->is_reserved = true;
 				metaBlock->chunk_size = p;
 			}
-			return &memory[curLoc] + sizeof(meta) - sizeof(char);
+			return &memory[curLoc] + sizeof(meta);
 		} else {
 			//TODO: Check if this overflows over MEMSIZE
 			curLoc += sizeof(meta) + metaBlock->chunk_size;

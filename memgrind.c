@@ -67,15 +67,15 @@ int empty(char* ptrs[],int index)
 // Custom test #1
 void test4() 
 {
-	char* ptrs[128];
+	char* ptrs[32];
 	int index = 0;
-	int length = rand() % (120 / 10) + 1;
+	int length = rand() % (5) + 1;
 	char* pointer = (char*)malloc(length);
 	while(pointer!=NULL)
 	{
 		printf("%d", &pointer);
 		ptrs[index++] == pointer;
-		length = rand() % (128 / 10) + 1;
+		length = rand() % (5) + 1;
 		pointer = (char*)malloc(length);
 	}
 	pointer = (char*)malloc(sizeof(char));
@@ -98,7 +98,7 @@ void test4()
 		free(ptrs[i]);
 	}
 	printf("emptied\n");
-	pointer = (char*)malloc(128 - 3);
+	pointer = (char*)malloc(32 - 3);
 	memdump();
 	if(pointer == NULL)
 	{
@@ -118,13 +118,13 @@ int main(int argc, char* argv) {
 	//printf("Test 1 average: %f μs\n", AVG_TIME(test1));
 	//printf("Test 2 average: %f μs\n", AVG_TIME(test2));
 	//printf("Test 3 average: %f μs\n", AVG_TIME(test3));
-	//printf("Test 4 average: %f μs\n", AVG_TIME(test4));
+	printf("Test 4 average: %f μs\n", AVG_TIME(test4));
 	//printf("Test 5 average: %f μs\n", AVG_TIME(test5));
 	//test4();
-	int* ints = (int*)malloc(sizeof(int) * 3);
-	memdump();
-	printf("--------------------\n");
-	free(ints);
-	memdump();
+	//int* ints = (int*)malloc(sizeof(int) * 3);
+	//memdump();
+	//printf("--------------------\n");
+	//free(ints);
+	//memdump();
 
 }
