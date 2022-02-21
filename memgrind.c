@@ -120,7 +120,7 @@ int main(int argc, char* argv) {
 	//printf("Test 3 average: %f μs\n", AVG_TIME(test3));
 	//printf("Test 4 average: %f μs\n", AVG_TIME(test4));
 	//printf("Test 5 average: %f μs\n", AVG_TIME(test5));
-	
+
 	printf("first");
 	memdump();
 	printf("____\n");
@@ -147,7 +147,7 @@ int main(int argc, char* argv) {
 	memdump();
 	printf("____\n");
 
-	free(short_str);
+	//free(short_str);
 	memdump();
 	printf("____\n");
 
@@ -161,7 +161,7 @@ int main(int argc, char* argv) {
 	memdump();
 	printf("____\n");
 
-	free(short_str2);
+	//free(short_str2);
 	memdump();
 	printf("____\n");
 
