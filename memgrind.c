@@ -56,7 +56,7 @@ int empty(char* ptrs[],int index)
 {
 	for(int i =0; i<index;i++)
 	{
-		if(ptrs[i]!=0)
+		if(ptrs[i]!=NULL)
 		{
 			return 1;
 		}
