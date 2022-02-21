@@ -1,5 +1,5 @@
 # My Malloc #
-Project 1 of System Architecture (CS214)
+Project 1 of System Programming (CS214)
 
 ## Goals ##
 Implement a version of `malloc()` and `free()` in the C programming language. The functions will store data in a 

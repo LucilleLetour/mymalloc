@@ -92,6 +92,7 @@ void myfree(int* p, char* file, int line)
 			}
 			return;
 		}
+		metaPrev = metaCurr;
 	}
 	printf("Not a valid pointer\n");
 }
