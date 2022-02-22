@@ -48,7 +48,7 @@ void* mymalloc(int p, char* file, int line) {
 
 	memdump();
 
-	while(curLoc <= MEMSIZE) {
+	while(curLoc < MEMSIZE) {
 		metaBlock = &memory[curLoc];
 		if(!metaBlock->is_reserved && metaBlock->chunk_size >= p) {
 			// We have enough space in this free chunk to create a malloc'd chunk
