@@ -82,7 +82,7 @@ void myfree(int* p, char* file, int line)
 		printf("Nothing is There\n");
 		return;
 	}
-	for(;metaCurr < (char*)(&memory + MEMSIZE); metaCurr = (char*)((char*)metaCurr + sizeof(meta) + metaCurr->chunk_size))
+	for(;metaCurr < (char*)(&memory[MEMSIZE]); metaCurr = (char*)((char*)metaCurr + sizeof(meta) + metaCurr->chunk_size))
 	{
 		unsigned int addressCheking = (char*)((char*)metaCurr + sizeof(meta));
 		//printf("current meta address: %u \n", metaCurr);
@@ -98,7 +98,7 @@ void myfree(int* p, char* file, int line)
 			{
 				metaPrev->chunk_size += sizeof(meta) + metaCurr->chunk_size;
 			}
-			if(metaNext < &memory + MEMSIZE)
+			if(metaNext < &memory[MEMSIZE])
 			{	
 				if(metaPrev != NULL && metaPrev->is_reserved==false && metaNext->is_reserved==false)
 				{

@@ -118,7 +118,7 @@ int main(int argc, char* argv) {
 	//printf("Test 1 average: %f μs\n", AVG_TIME(test1));
 	//printf("Test 2 average: %f μs\n", AVG_TIME(test2));
 	//printf("Test 3 average: %f μs\n", AVG_TIME(test3));
-	printf("Test 4 average: %f μs\n", AVG_TIME(test4));
+	//printf("Test 4 average: %f μs\n", AVG_TIME(test4));
 	//printf("Test 5 average: %f μs\n", AVG_TIME(test5));
 	//test4();
 	//int* ints = (int*)malloc(sizeof(int) * 3);
@@ -126,5 +126,14 @@ int main(int argc, char* argv) {
 	//printf("--------------------\n");
 	//free(ints);
 	//memdump();
-
+	char* first = (char*)malloc(sizeof(char) * 3);
+	char* second = (char*)malloc(sizeof(char) * 6);
+	char* third = (char*)malloc(sizeof(char) * 11);
+	memdump();
+	free(first);
+	memdump();
+	free(third);
+	memdump();
+	free(second);
+	memdump();
 }
