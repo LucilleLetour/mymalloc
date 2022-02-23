@@ -39,14 +39,14 @@ void* mymalloc(int p, char* file, int line) {
 	if(metaBlock->chunk_size == 0) {
 		//This should only happened on an uninitialized memory array, intializes arr with a Meta tag defining the entire space as free
 		metaBlock->is_reserved = 0;
-		printf("%d\n", sizeof(meta));
-		printf("%d\n", sizeof(char));
-		printf("%d\n", sizeof(unsigned short));
+		//printf("%d\n", sizeof(meta));
+		//printf("%d\n", sizeof(char));
+		//printf("%d\n", sizeof(unsigned short));
 		metaBlock->chunk_size = MEMSIZE - sizeof(meta);
-		printf("memory initialized\n");
+		//printf("memory initialized\n");
 	}
 
-	memdump();
+	//memdump();
 
 	while(curLoc < MEMSIZE) {
 		metaBlock = &memory[curLoc];
@@ -75,6 +75,11 @@ void* mymalloc(int p, char* file, int line) {
 
 void myfree(int* p, char* file, int line)
 {
+	if(p==NULL)
+	{
+		printf("Entered Null as Pointer\n");
+		return;
+	}
 	meta* metaPrev = NULL;
 	meta* metaCurr = &memory;
 	if(metaCurr->chunk_size == 0)
@@ -88,9 +93,14 @@ void myfree(int* p, char* file, int line)
 		//printf("current meta address: %u \n", metaCurr);
 		//printf("size of meta: %u \n", sizeof(meta));
 		//printf("checking address in loop to p: %u, %u\n", addressCheking, p);
-		//printf("\n", addressCheking, p);
+		//printf("addressing chekcing %u, pointer given %u\n", addressCheking, p);
 		if(addressCheking == (unsigned int)p)
 		{
+			if(metaCurr->is_reserved==false)
+			{
+				printf("Possible Double Free\n");
+				return;
+			}
 			//printf("found location\n");
 			metaCurr->is_reserved = false;
 			meta* metaNext = (char*)((char*)metaCurr + sizeof(meta) + metaCurr->chunk_size);
@@ -110,6 +120,10 @@ void myfree(int* p, char* file, int line)
 				}
 			}
 			return;
+		}
+		else if(addressCheking > (unsigned int)p)
+		{
+			break;
 		}
 		metaPrev = metaCurr;
 	}

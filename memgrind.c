@@ -52,58 +52,58 @@ void test3() {
 	}
 }
 
-int empty(char* ptrs[],int index)
-{
-	for(int i =0; i<index;i++)
-	{
-		if(ptrs[i]!=NULL)
-		{
-			return 1;
-		}
-	}
-	return 0;
-}
+
 
 // Custom test #1
 void test4() 
 {
+	int memsize = 32;
 	char* ptrs[32];
 	int index = 0;
-	int length = rand() % (5) + 1;
+	int memcount = 0;
+	int length = rand() % (10) + 1;
 	char* pointer = (char*)malloc(length);
 	while(pointer!=NULL)
 	{
-		printf("%d", &pointer);
-		ptrs[index++] == pointer;
-		length = rand() % (5) + 1;
+		ptrs[index++] = pointer;
+		memcount += 3 + length;
+		length = rand() % (10) + 1;
+		if(memcount+3+length > memsize)
+		{
+			break;
+		}
 		pointer = (char*)malloc(length);
+		
 	}
-	pointer = (char*)malloc(sizeof(char));
-	while(pointer!=NULL)
+
+	if(memcount+4 <= memsize)
 	{
-		ptrs[index++] == pointer;
 		pointer = (char*)malloc(sizeof(char));
+		while(pointer!=NULL)
+		{
+			ptrs[index++] = pointer;
+			memcount += 4;
+			if(memcount+4>memsize)
+			{	
+				break;
+			}
+			pointer = (char*)malloc(sizeof(char));
+		}
 	}
-	//while(empty(ptrs, index)==0)
-	//{
-	//	length = rand() % index;
-	//	if(ptrs[length]==NULL)
-	//		{
-	//		continue;
-	//	}
-	//	free(ptrs[length]);
-	//	ptrs[length]==NULL;
-	//}
-	for(int i = 0; i<index-1; i++){
+	
+	for(int i = 0; i<index; i++)
+	{
+		//printf("freeing %u \n",ptrs[i]);
 		free(ptrs[i]);
 	}
-	printf("emptied\n");
-	pointer = (char*)malloc(32 - 3);
-	memdump();
+
+	pointer = (char*)malloc(memsize - 3);
 	if(pointer == NULL)
 	{
-		printf("FAILED");
+		printf("FAILED\n");
 	}
+	free(pointer);
+	//printf("SUCCESS\n");
 }
 
 
@@ -118,63 +118,82 @@ int main(int argc, char* argv) {
 	//printf("Test 1 average: %f μs\n", AVG_TIME(test1));
 	//printf("Test 2 average: %f μs\n", AVG_TIME(test2));
 	//printf("Test 3 average: %f μs\n", AVG_TIME(test3));
-	//printf("Test 4 average: %f μs\n", AVG_TIME(test4));
+	printf("Test 4 average: %f μs\n", AVG_TIME(test4));
 	//printf("Test 5 average: %f μs\n", AVG_TIME(test5));
+	//test4();
+	// printf("init");
+	// memdump();
+	// printf("____\n");
 
-	printf("init");
-	memdump();
-	printf("____\n");
+	// char* short_str = malloc(sizeof(char) * 6);
+	// printf("first %u \n", short_str);
+	// short_str[0] = '1';
+	// short_str[1] = '2';
+	// short_str[2] = '3';
+	// short_str[3] = '4';
+	// short_str[4] = '5';
+	// short_str[5] = '6';
+	// memdump();
+	// printf("____\n");
 
-	char* short_str = malloc(sizeof(char) * 6);
-	printf("first %u \n", short_str);
-	short_str[0] = 'a';
-	short_str[1] = 'b';
-	short_str[2] = 'c';
-	short_str[3] = 'd';
-	short_str[4] = 'e';
-	short_str[5] = '\0';
-	memdump();
-	printf("____\n");
-
-	char* short_str2 = malloc(sizeof(char) * 6);
-	printf("second %u \n", short_str2);
-	short_str2[0] = 'a';
-	short_str2[1] = 'b';
-	short_str2[2] = 'c';
-	short_str2[3] = 'd';
-	short_str2[4] = 'e';
-	short_str2[5] = '\0';
-	memdump();
-	printf("____\n");
-
-	//free(short_str);
-	memdump();
-	printf("____\n");
-
-	char* short_str3 = malloc(sizeof(char) * 5);
-	printf("third %u \n", short_str3);
-	short_str3[0] = 'a';
-	short_str3[1] = 'b';
-	short_str3[2] = 'c';
-	short_str3[3] = 'd';
-	short_str3[4] = '\0';
-	memdump();
-	printf("____\n");
-
-	//free(short_str2);
-	memdump();
-	printf("____\n");
+	// char* short_str2 = malloc(sizeof(char) * 6);
+	// printf("second %u \n", short_str2);
+	// short_str2[0] = 'a';
+	// short_str2[1] = 'b';
+	// short_str2[2] = 'c';
+	// short_str2[3] = 'd';
+	// short_str2[4] = 'e';
+	// short_str2[5] = 'f';
+	// memdump();
+	// printf("____\n");
 
 
-	char* short_str4 = malloc(sizeof(char) * 5);
-	printf("fourth %u \n", short_str4);
-	short_str4[0] = 'a';
-	short_str4[1] = 'b';
-	short_str4[2] = 'c';
-	short_str4[3] = 'd';
-	short_str4[4] = '\0';
+	// char* short_str3 = malloc(sizeof(char) * 5);
+	// printf("third %u \n", short_str3);
+	// short_str3[0] = 't';
+	// short_str3[1] = 'u';
+	// short_str3[2] = 'v';
+	// short_str3[3] = 'w';
+	// short_str3[4] = 'x';
+	// memdump();
+	// printf("____\n");
 
-	memdump();
-	printf("____\n");
+
+	
+
+	// char* short_str4 = malloc(sizeof(char) * 3);
+	// if(short_str4!=NULL)
+	// {
+	// printf("fourth %u \n", short_str4);
+	// short_str4[0] = 'a';
+	// short_str4[1] = 'b';
+	// short_str4[2] = 'c';
+	// }
+
+	// memdump();
+	// printf("____\n");
+	
+	// printf("third freed\n");
+	// free(short_str3);
+	// memdump();
+	// printf("____\n");
+	// printf("secind freed\n");
+	// free(short_str2);
+	// memdump();
+	// printf("____\n");
+	// printf("first freed\n");
+	// free(short_str);
+	// memdump();
+	// printf("____\n");
+	// printf("fourth freed\n");
+	// free(short_str4);
+	// memdump();
+	// printf("____\n");
+
+
+	// printf("first freed again\n");
+	// free(short_str);
+	// memdump();
+	// printf("____\n");
 	
 }
