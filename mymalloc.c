@@ -3,7 +3,7 @@
 
 #pragma pack(1)
 
-#define MEMSIZE 32
+#define MEMSIZE 4096
 
 #define check(p) if(p == NULL) {\
 printf("Null pointer at " __FILE__ ":%d\n", __LINE__); \
@@ -35,7 +35,7 @@ void* mymalloc(int p, char* file, int line) {
 	//printf(__FILE__ " at line: %d\n", __LINE__);
 	// Goal: find first available free chunk with adequate size
 	int curLoc = 0;
-	meta* metaBlock = &memory[curLoc];
+	meta* metaBlock = (meta*)&memory[curLoc];
 	if(metaBlock->chunk_size == 0) {
 		//This should only happened on an uninitialized memory array, intializes arr with a Meta tag defining the entire space as free
 		metaBlock->is_reserved = 0;
@@ -49,7 +49,7 @@ void* mymalloc(int p, char* file, int line) {
 	//memdump();
 
 	while(curLoc < MEMSIZE) {
-		metaBlock = &memory[curLoc];
+		metaBlock = (meta*)&memory[curLoc];
 		if(!metaBlock->is_reserved && metaBlock->chunk_size >= p) {
 			// We have enough space in this free chunk to create a malloc'd chunk
 			if(metaBlock->chunk_size < p + sizeof(meta) + sizeof(char)) {
@@ -57,7 +57,7 @@ void* mymalloc(int p, char* file, int line) {
 				metaBlock->is_reserved = true;
 			} else {
 				// We have enough spcae for the requested chunk and another (free, for now) chunk
-				meta *metaBlock2 = &memory[curLoc + sizeof(meta) + p];
+				meta *metaBlock2 = (meta*)&memory[curLoc + sizeof(meta) + p];
 				metaBlock2->is_reserved = false;
 				metaBlock2->chunk_size = metaBlock->chunk_size - p - sizeof(meta);
 				metaBlock->is_reserved = true;
@@ -81,7 +81,7 @@ void myfree(int* p, char* file, int line)
 		return;
 	}
 	meta* metaPrev = NULL;
-	meta* metaCurr = &memory;
+	meta* metaCurr = (meta*)&memory;
 	if(metaCurr->chunk_size == 0)
 	{
 		printf("ERROR: Not a valid pointer given by malloc at " __FILE__ ":%d\n", __LINE__);
@@ -94,7 +94,7 @@ void myfree(int* p, char* file, int line)
 		//printf("size of meta: %u \n", sizeof(meta));
 		//printf("checking address in loop to p: %u, %u\n", addressCheking, p);
 		//printf("addressing chekcing %u, pointer given %u\n", addressCheking, p);
-		if(addressCheking == p)
+		if(addressCheking == (char*)p)
 		{
 			if(metaCurr->is_reserved==false)
 			{

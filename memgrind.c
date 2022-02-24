@@ -57,8 +57,8 @@ void test3() {
 // Custom test #1
 void test4() 
 {
-	int memsize = 32;
-	char* ptrs[32];
+	int memsize = 4096;
+	char* ptrs[4096];
 	int index = 0;
 	int memcount = 0;
 	int length = rand() % (10) + 1;
@@ -122,7 +122,7 @@ void test5()
 int main(int argc, char* argv) {
 	//printf("Test 1 average: %f μs\n", AVG_TIME(test1));
 	//printf("Test 2 average: %f μs\n", AVG_TIME(test2));
-	//printf("Test 3 average: %f μs\n", AVG_TIME(test3));
+	printf("Test 3 average: %f μs\n", AVG_TIME(test3));
 	printf("Test 4 average: %f μs\n", AVG_TIME(test4));
 	//printf("Test 5 average: %f μs\n", AVG_TIME(test5));
 	//test4();
