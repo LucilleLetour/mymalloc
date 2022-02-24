@@ -77,38 +77,38 @@ void myfree(int* p, char* file, int line)
 {
 	if(p==NULL)
 	{
-		printf("Entered Null as Pointer\n");
+		printf("ERROR: Tried to free a null pointer at " __FILE__ ":%d\n", __LINE__);
 		return;
 	}
 	meta* metaPrev = NULL;
 	meta* metaCurr = &memory;
 	if(metaCurr->chunk_size == 0)
 	{
-		printf("Nothing is There\n");
+		printf("ERROR: Not a valid pointer given by malloc at " __FILE__ ":%d\n", __LINE__);
 		return;
 	}
-	for(;metaCurr < (char*)(&memory[MEMSIZE]); metaCurr = (char*)((char*)metaCurr + sizeof(meta) + metaCurr->chunk_size))
+	for(;metaCurr < (meta*)(&memory[MEMSIZE]); metaCurr = (meta*)((char*)metaCurr + sizeof(meta) + metaCurr->chunk_size))
 	{
-		unsigned int addressCheking = (char*)((char*)metaCurr + sizeof(meta));
+		char* addressCheking = (char*)((char*)metaCurr + sizeof(meta));
 		//printf("current meta address: %u \n", metaCurr);
 		//printf("size of meta: %u \n", sizeof(meta));
 		//printf("checking address in loop to p: %u, %u\n", addressCheking, p);
 		//printf("addressing chekcing %u, pointer given %u\n", addressCheking, p);
-		if(addressCheking == (unsigned int)p)
+		if(addressCheking == p)
 		{
 			if(metaCurr->is_reserved==false)
 			{
-				printf("Possible Double Free\n");
+				printf("ERROR: Possible double free at " __FILE__ ":%d\n", __LINE__);
 				return;
 			}
 			//printf("found location\n");
 			metaCurr->is_reserved = false;
-			meta* metaNext = (char*)((char*)metaCurr + sizeof(meta) + metaCurr->chunk_size);
+			meta* metaNext = (meta*)((char*)metaCurr + sizeof(meta) + metaCurr->chunk_size);
 			if(metaPrev != NULL && metaPrev->is_reserved == false)
 			{
 				metaPrev->chunk_size += sizeof(meta) + metaCurr->chunk_size;
 			}
-			if(metaNext < &memory[MEMSIZE])
+			if(metaNext < (meta*)&memory[MEMSIZE])
 			{	
 				if(metaPrev != NULL && metaPrev->is_reserved==false && metaNext->is_reserved==false)
 				{
@@ -121,32 +121,31 @@ void myfree(int* p, char* file, int line)
 			}
 			return;
 		}
-		else if(addressCheking > (unsigned int)p)
+		else if((char*)addressCheking > (char*)p)
 		{
 			break;
 		}
 		metaPrev = metaCurr;
 	}
-	printf("Not a valid pointer\n");
+	printf("ERROR: Not a valid pointer given by malloc at " __FILE__ ":%d\n", __LINE__);
 }
 
 
 int main2(int argc, char* argv) 
 {
-	unsigned int* memStart = memory;
-	free(memStart);
-	char* short_str = malloc(sizeof(char) * 6);
-	short_str[0] = 'H';
-	short_str[1] = 'e';
-	short_str[2] = 'l';
-	short_str[3] = 'l';
-	short_str[4] = 'o';
-	short_str[5] = '\0';
-	printf("===MEMDUMPING===\n");
-	memdump();
-	printf("freeing: %u \n",short_str);
-	free(short_str);
-	memdump();
-	return EXIT_SUCCESS;
-
+	// unsigned int* memStart = memory;
+	// free(memStart);
+	// char* short_str = malloc(sizeof(char) * 6);
+	// short_str[0] = 'H';
+	// short_str[1] = 'e';
+	// short_str[2] = 'l';
+	// short_str[3] = 'l';
+	// short_str[4] = 'o';
+	// short_str[5] = '\0';
+	// printf("===MEMDUMPING===\n");
+	// memdump();
+	// printf("freeing: %u \n",short_str);
+	// free(short_str);
+	// memdump();
+	// return EXIT_SUCCESS;
 }

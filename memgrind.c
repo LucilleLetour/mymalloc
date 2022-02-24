@@ -73,9 +73,7 @@ void test4()
 			break;
 		}
 		pointer = (char*)malloc(length);
-		
 	}
-
 	if(memcount+4 <= memsize)
 	{
 		pointer = (char*)malloc(sizeof(char));
@@ -90,13 +88,22 @@ void test4()
 			pointer = (char*)malloc(sizeof(char));
 		}
 	}
-	
 	for(int i = 0; i<index; i++)
 	{
 		//printf("freeing %u \n",ptrs[i]);
-		free(ptrs[i]);
+		if(i%2==0)
+		{
+			free(ptrs[i]);
+		}
 	}
-
+	for(int i = 0; i<index; i++)
+	{
+		//printf("freeing %u \n",ptrs[i]);
+		if(i%2==1)
+		{
+			free(ptrs[i]);
+		}
+	}
 	pointer = (char*)malloc(memsize - 3);
 	if(pointer == NULL)
 	{
@@ -105,8 +112,6 @@ void test4()
 	free(pointer);
 	//printf("SUCCESS\n");
 }
-
-
 
 // Custom test #2
 void test5() 

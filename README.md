@@ -31,6 +31,6 @@ Use `malloc()` to get 120 1-byte chunks, storing the pointers in an array, then 
 ### Test3 ###
 Allocating a 1-byte chunk and storing the pointer in an array
 ### Test4 ###
-Allocating random size byte chunks until failure (running out of availible memory) and freeing the chunks randomly until the memory is empty.
+Allocating random size byte chunks until failure (running out of availible memory) and freeing the chunks at even then odd location to test coalesce.
 ### Test5 ###
 Allocating a n-byte chunks until failure and freeing every other pointer where n = 0 to MEMSIZE (4096)
