@@ -122,6 +122,18 @@ void test4()
 	//printf("SUCCESS\n");
 }
 
+int empty(char* pointers[], int index)
+{
+	for (int i = 0; i<index;i++)
+	{
+		if(pointers[i]!=NULL)
+		{
+			return 1;
+		}
+	}
+	return 0;
+}
+
 // Custom test #2
 void test5() 
 {
@@ -135,9 +147,15 @@ void test5()
 		ptrs[index] = pointer;
 		index++;
 	}
-	for(int i = 0; i<index; i++)
+	while(empty(ptrs,index)==1)
 	{
-		free(ptrs[i]);
+		int length = rand() % index;
+		if(ptrs[length]==NULL)
+		{
+			continue;
+		}
+		free(ptrs[length]);
+		ptrs[length] = NULL;
 	}
 
 	char* temp = (char*)malloc(4096 - 3);

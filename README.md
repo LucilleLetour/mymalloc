@@ -29,8 +29,8 @@ Tests 4 and 5 are of our own design, the first 3 come from assignment's required
 ### Test2 ###
 Use `malloc()` to get 120 1-byte chunks, storing the pointers in an array, then use `free()` to deallocate the chunks.
 ### Test3 ###
-Allocating a 1-byte chunk and storing the pointer in an array
+Randomly allocate a 1-byte chunk and store the pointer in an array or free a recent chunk 120 times
 ### Test4 ###
 Allocating random size byte chunks until failure (running out of availible memory) and freeing the chunks at even then odd location to test coalesce.
 ### Test5 ###
-Allocating a n-byte chunks until failure and freeing every other pointer where n = 0 to MEMSIZE (4096)
+Allocating a maximum amount of 1-byte chunks and randomly freeing until the entire memory is empty
