@@ -42,13 +42,22 @@ void test3() {
 	int numAllocated = 0;
 	char *ptrs[120];
 	for(int i = 0; i < 120; i++) {
-		if(rand() % 2) {
+		if(rand() % 2) 
+		{
 			ptrs[numAllocated++] = (char*)malloc(sizeof(char));
-		} else {
-			if(numAllocated > 0) {
-				free(ptrs[--numAllocated]);
+		} 
+		else 
+		{
+			if(numAllocated > 0) 
+			{
+				numAllocated-=1;
+				free(ptrs[numAllocated]);
 			}
 		}
+	}
+	for(int i = 0; i < numAllocated; i++) 
+	{
+		free(ptrs[i]);
 	}
 }
 
@@ -116,15 +125,28 @@ void test4()
 // Custom test #2
 void test5() 
 {
-	
+	int count = 0;
+	int index = 0;
+	char* ptrs[4096];
+	while(count+4<=4096)
+	{
+		char* pointer = (char*)malloc(sizeof(char));
+		count+=4;
+		ptrs[index] = pointer;
+		index++;
+	}
+	for(int i = 0; i<index; i++)
+	{
+		free(ptrs[i]);
+	}
 }
 
 int main(int argc, char* argv) {
-	//printf("Test 1 average: %f μs\n", AVG_TIME(test1));
-	//printf("Test 2 average: %f μs\n", AVG_TIME(test2));
+	printf("Test 1 average: %f μs\n", AVG_TIME(test1));
+	printf("Test 2 average: %f μs\n", AVG_TIME(test2));
 	printf("Test 3 average: %f μs\n", AVG_TIME(test3));
 	printf("Test 4 average: %f μs\n", AVG_TIME(test4));
-	//printf("Test 5 average: %f μs\n", AVG_TIME(test5));
+	printf("Test 5 average: %f μs\n", AVG_TIME(test5));
 	//test4();
 	// printf("init");
 	// memdump();

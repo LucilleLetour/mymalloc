@@ -73,7 +73,7 @@ void* mymalloc(int p, char* file, int line) {
 	return NULL;
 }
 
-void myfree(int* p, char* file, int line)
+void myfree(void* p, char* file, int line)
 {
 	if(p==NULL)
 	{
@@ -84,17 +84,17 @@ void myfree(int* p, char* file, int line)
 	meta* metaCurr = (meta*)&memory;
 	if(metaCurr->chunk_size == 0)
 	{
-		printf("ERROR: Not a valid pointer given by malloc at " __FILE__ ":%d\n", __LINE__);
+		printf("ERROR: Nothing has been malloced at " __FILE__ ":%d\n", __LINE__);
 		return;
 	}
-	for(;metaCurr < (meta*)(&memory[MEMSIZE]); metaCurr = (meta*)((char*)metaCurr + sizeof(meta) + metaCurr->chunk_size))
+	for(;metaCurr < (meta*)&memory[MEMSIZE]; metaCurr = (meta*)((char*)metaCurr + sizeof(meta) + metaCurr->chunk_size))
 	{
-		char* addressCheking = (char*)((char*)metaCurr + sizeof(meta));
+		void* addressCheking = (void*)((char*)metaCurr + sizeof(meta));
 		//printf("current meta address: %u \n", metaCurr);
 		//printf("size of meta: %u \n", sizeof(meta));
 		//printf("checking address in loop to p: %u, %u\n", addressCheking, p);
 		//printf("addressing chekcing %u, pointer given %u\n", addressCheking, p);
-		if(addressCheking == (char*)p)
+		if(addressCheking == p)
 		{
 			if(metaCurr->is_reserved==false)
 			{
@@ -121,7 +121,7 @@ void myfree(int* p, char* file, int line)
 			}
 			return;
 		}
-		else if((char*)addressCheking > (char*)p)
+		else if(addressCheking > p)
 		{
 			break;
 		}
