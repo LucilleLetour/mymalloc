@@ -139,6 +139,13 @@ void test5()
 	{
 		free(ptrs[i]);
 	}
+
+	char* temp = (char*)malloc(4096 - 3);
+	if(temp == NULL)
+	{
+		printf("FAILED\n");
+	}
+	free(temp);
 }
 
 int main(int argc, char* argv) {
