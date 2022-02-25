@@ -75,18 +75,22 @@ void* mymalloc(int p, char* file, int line) {
 
 void myfree(void* p, char* file, int line)
 {
+	//check for NULL pointer
 	if(p==NULL)
 	{
 		printf("ERROR: Tried to free a null pointer at " __FILE__ ":%d\n", __LINE__);
 		return;
 	}
+	//set up meta pointers
 	meta* metaPrev = NULL;
 	meta* metaCurr = (meta*)&memory;
+	//Check if memory is not initialized 
 	if(metaCurr->chunk_size == 0)
 	{
 		printf("ERROR: Nothing has been malloced at " __FILE__ ":%d\n", __LINE__);
 		return;
 	}
+	//for loop through the entire memory and advance by the chunk size
 	for(;metaCurr < (meta*)&memory[MEMSIZE]; metaCurr = (meta*)((char*)metaCurr + sizeof(meta) + metaCurr->chunk_size))
 	{
 		void* addressCheking = (void*)((char*)metaCurr + sizeof(meta));
@@ -94,8 +98,11 @@ void myfree(void* p, char* file, int line)
 		//printf("size of meta: %u \n", sizeof(meta));
 		//printf("checking address in loop to p: %u, %u\n", addressCheking, p);
 		//printf("addressing chekcing %u, pointer given %u\n", addressCheking, p);
+
+		//Check if address given is valid pointer
 		if(addressCheking == p)
-		{
+		{	
+			//Check if that pointer is already freed
 			if(metaCurr->is_reserved==false)
 			{
 				printf("ERROR: Possible double free at " __FILE__ ":%d\n", __LINE__);
@@ -104,10 +111,13 @@ void myfree(void* p, char* file, int line)
 			//printf("found location\n");
 			metaCurr->is_reserved = false;
 			meta* metaNext = (meta*)((char*)metaCurr + sizeof(meta) + metaCurr->chunk_size);
+
+			//coalesce with previous meta tag
 			if(metaPrev != NULL && metaPrev->is_reserved == false)
 			{
 				metaPrev->chunk_size += sizeof(meta) + metaCurr->chunk_size;
 			}
+			//coalesce with mext meta tag
 			if(metaNext < (meta*)&memory[MEMSIZE])
 			{	
 				if(metaPrev != NULL && metaPrev->is_reserved==false && metaNext->is_reserved==false)
@@ -125,8 +135,10 @@ void myfree(void* p, char* file, int line)
 		{
 			break;
 		}
+		//advance prev pointer to current
 		metaPrev = metaCurr;
 	}
+	//not a valid pointer given by malloc
 	printf("ERROR: Not a valid pointer given by malloc at " __FILE__ ":%d\n", __LINE__);
 }
 
