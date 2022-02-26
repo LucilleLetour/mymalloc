@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
-
+#include "mymalloc.h"
 #pragma pack(1)
 
-#define MEMSIZE 4096
+//#define MEMSIZE 4096
 
 #define check(p) if(p == NULL) {\
 printf("Null pointer at " __FILE__ ":%d\n", __LINE__); \
@@ -14,14 +14,14 @@ static char memory[MEMSIZE];
 
 typedef enum { false, true } bool;
 
-struct test {
-	char testchar;
-};
-
 typedef struct meta {
 	char is_reserved;
 	unsigned short chunk_size;
 } meta;
+
+int metasize() {
+	return sizeof(meta);
+}
 
 void memdump() 
 {
@@ -31,7 +31,7 @@ void memdump()
 	printf("--------\n");
 }
 
-void* mymalloc(int p, char* file, int line) {
+void* mymalloc(size_t p, char* file, int line) {
 	//printf(__FILE__ " at line: %d\n", __LINE__);
 	// Goal: find first available free chunk with adequate size
 	int curLoc = 0;
@@ -78,7 +78,7 @@ void myfree(void* p, char* file, int line)
 	//check for NULL pointer
 	if(p==NULL)
 	{
-		printf("ERROR: Tried to free a null pointer at " __FILE__ ":%d\n", __LINE__);
+		printf("ERROR: Tried to free a null pointer at %s:%d\n", file, line);
 		return;
 	}
 	//set up meta pointers
@@ -87,7 +87,7 @@ void myfree(void* p, char* file, int line)
 	//Check if memory is not initialized 
 	if(metaCurr->chunk_size == 0)
 	{
-		printf("ERROR: Nothing has been malloced at " __FILE__ ":%d\n", __LINE__);
+		printf("ERROR: Nothing has been malloced at %s:%d\n", file, line);
 		return;
 	}
 	//for loop through the entire memory and advance by the chunk size
@@ -105,7 +105,7 @@ void myfree(void* p, char* file, int line)
 			//Check if that pointer is already freed
 			if(metaCurr->is_reserved==false)
 			{
-				printf("ERROR: Possible double free at " __FILE__ ":%d\n", __LINE__);
+				printf("ERROR: Possible double free at %s:%d\n", file, line);
 				return;
 			}
 			//printf("found location\n");
@@ -139,7 +139,7 @@ void myfree(void* p, char* file, int line)
 		metaPrev = metaCurr;
 	}
 	//not a valid pointer given by malloc
-	printf("ERROR: Not a valid pointer given by malloc at " __FILE__ ":%d\n", __LINE__);
+	printf("ERROR: Not a valid pointer given by malloc at %s:%d\n", file, line);
 }
 
 

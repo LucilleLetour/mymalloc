@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//#define USE_STD_MALLOC
+//#define USE_STD_MALLOC // Define to test the test cases using malloc() and free() from the standard library
 
 #ifndef USE_STD_MALLOC
 	#include "mymalloc.h"
@@ -11,9 +11,6 @@
 #define TEST_ITERATIONS 50
 #define MEASURE_MICRO_SEC(x) ({clock_t start = clock(); x(); clock_t diff = clock() - start; diff * 1000000 / CLOCKS_PER_SEC;})
 #define AVG_TIME(x) ({double tot = 0; for(int i = 0; i < TEST_ITERATIONS; i++) { tot += MEASURE_MICRO_SEC(x); } tot / TEST_ITERATIONS;})
-
-
-//#define MEASURE_MSEC(x) ({start = clock(); x; diff = clock() - start; diff * 1000 / CLOCKS_PER_SEC;})
 
 // Allocate and immediately free 120 1-byte chunks
 void test1() {
@@ -42,16 +39,11 @@ void test3() {
 	int numAllocated = 0;
 	char *ptrs[120];
 	for(int i = 0; i < 120; i++) {
-		if(rand() % 2) 
-		{
+		if(rand() % 2) {
 			ptrs[numAllocated++] = (char*)malloc(sizeof(char));
-		} 
-		else 
-		{
-			if(numAllocated > 0) 
-			{
-				numAllocated-=1;
-				free(ptrs[numAllocated]);
+		} else {
+			if(numAllocated > 0) {
+				free(ptrs[--numAllocated]);
 			}
 		}
 	}
@@ -64,58 +56,57 @@ void test3() {
 
 
 // Custom test #1
-void test4() 
-{
-	int memsize = 4096;
-	char* ptrs[4096];
-	int index = 0;
-	int memcount = 0;
+void test4() {
+	char* ptrs[MEMSIZE];
+	int ptridx = -1;
+	int memidx = 0;
+	/*int memcount = 0;
 	int length = rand() % (10) + 1;
 	char* pointer = (char*)malloc(length);
-	while(pointer!=NULL)
-	{
-		ptrs[index++] = pointer;
-		memcount += 3 + length;
+	while(pointer != NULL) {
+		ptrs[ptridx++] = pointer;
+		//memcount += 3 + length;
 		length = rand() % (10) + 1;
-		if(memcount+3+length > memsize)
+		//if(memcount+3+length > MEMSIZE)
 		{
 			break;
 		}
 		pointer = (char*)malloc(length);
+	}*/
+	while(memidx + metasize() + 10 < MEMSIZE) {
+		int len = rand() % 10 + 1;
+		ptrs[++ptridx] = (char*)malloc(len);
+		memidx += metasize() + len;
 	}
-	if(memcount+4 <= memsize)
-	{
+
+	/*if(ptrs[ptridx - 1] + sizeof(meta) + sizeof(char) <= MEMSIZE) {
 		pointer = (char*)malloc(sizeof(char));
-		while(pointer!=NULL)
-		{
-			ptrs[index++] = pointer;
+		while(pointer!=NULL) {
+			ptrs[ptridx++] = pointer;
 			memcount += 4;
-			if(memcount+4>memsize)
-			{	
+			if(memcount + 4 > MEMSIZE) {
 				break;
 			}
 			pointer = (char*)malloc(sizeof(char));
 		}
+	}*/
+	while(memidx + metasize() + sizeof(char) < MEMSIZE) {
+		ptrs[++ptridx] = (char*)malloc(sizeof(char));
+		memidx += metasize() + sizeof(char);
 	}
-	for(int i = 0; i<index; i++)
-	{
+	//memdump();
+	for(int i = 0; i <= ptridx; i += 2) {
 		//printf("freeing %u \n",ptrs[i]);
-		if(i%2==0)
-		{
-			free(ptrs[i]);
-		}
+		free(ptrs[i]);
 	}
-	for(int i = 0; i<index; i++)
-	{
+
+	for(int i = 1; i <= ptridx; i += 2) {
 		//printf("freeing %u \n",ptrs[i]);
-		if(i%2==1)
-		{
-			free(ptrs[i]);
-		}
+		free(ptrs[i]);
 	}
-	pointer = (char*)malloc(memsize - 3);
-	if(pointer == NULL)
-	{
+	//memdump();
+	void* pointer = malloc(MEMSIZE - metasize());
+	if(pointer == NULL) {
 		printf("FAILED\n");
 	}
 	free(pointer);
@@ -135,8 +126,7 @@ int empty(char* pointers[], int index)
 }
 
 // Custom test #2
-void test5() 
-{
+void test5() {
 	int count = 0;
 	int index = 0;
 	char* ptrs[4096];
@@ -150,7 +140,7 @@ void test5()
 	while(empty(ptrs,index)==1)
 	{
 		int length = rand() % index;
-		if(ptrs[length]==NULL)
+		if(ptrs[length] == NULL)
 		{
 			continue;
 		}
@@ -159,14 +149,16 @@ void test5()
 	}
 
 	char* temp = (char*)malloc(4096 - 3);
-	if(temp == NULL)
-	{
+	if(temp == NULL) {
 		printf("FAILED\n");
 	}
 	free(temp);
 }
 
 int main(int argc, char* argv) {
+	time_t t;
+	srand(time(&t));
+
 	printf("Test 1 average: %f μs\n", AVG_TIME(test1));
 	printf("Test 2 average: %f μs\n", AVG_TIME(test2));
 	printf("Test 3 average: %f μs\n", AVG_TIME(test3));
