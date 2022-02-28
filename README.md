@@ -6,12 +6,12 @@ Implement a version of `malloc()` and `free()` in the C programming language. Th
 
 
 ## Meta Tag Implementation ##
-In order to maximize the amount of memory used on the memory array, the smallest amount of data types were used for the meta tag. Char data type was used to determine if a meta tag for a chunk was used or freed. Short data type was used to record how many bytes were allocated for the meta tag chunk. Since short can cover up to 32,767 (or 65,535 if unsigned), it is enough for 4096. In addition, the struct was packed to 1 byte alignment in order to maximize the memory space. 
+In order to maximize the amount of memory used on the memory array, the smallest amount of data types were used for the meta tag. Char data type was used to determine if a meta tag for a chunk was used or freed. Short data type was used to record how many bytes were allocated for the meta tag chunk. Since short can cover up to index 32,767 (or 65,535 if unsigned), it is enough for 4096 or any MEMSIZE other less than short. In addition, the struct was packed to 1 byte alignment in order to maximize the memory space. 
 
 ## Malloc Implementation ##
 
 ## Free Implementation ##
-For this implementation of `free()`, a simple for loop was used to go through the memory array and determine if the given address is a valid pointer to be freed. If the given parameter is not a valid pointer given by malloc, it will print an error message accordingly. The loop begins from the start of the memory + sizeof(meta) address and advances to the next meta data tag by the current chunk size amount. While going through the loop, it keeps a pointer of the previous, current, and next meta tags to be used later in the coalesce process.
+For this implementation of `free()`, a simple for loop was used to go through the memory array and determine if the given address is a valid pointer to be freed. If the given parameter is not a valid pointer given by malloc, it will print an error message accordingly. The loop begins from the start of the memory + sizeof(meta) address and advances to the next meta data tag by the current chunk size amount. While going through the loop, it keeps a pointer of the previous, current, and next meta tags to be used later in the coalesce process. In terms of the error message, it will say either: invalid pointer, null pointer, or possible double free depending on the pointer.
 
 ### Coalesce upon Free ###
 After checking that it is a valid pointer to be freed, free will attempt to coalesce the current meta tag with the previous and next tag. In other words, the only possible areas that could be combined with the current chunk area (which are the spaces in front and behind the memory chunk) are taken into consideration and do not need to be considered to coalesce again. This approach ensures that we take care of all free cases instead of attempting to coalesce in malloc which may have multiple coalesce procedures.
