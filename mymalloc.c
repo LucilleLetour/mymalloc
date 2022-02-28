@@ -69,7 +69,7 @@ void* mymalloc(size_t p, char* file, int line) {
 			curLoc += sizeof(meta) + metaBlock->chunk_size;
 		}
 	}
-	printf("No free memory\n");
+	printf("ERROR: No free memory at %s:%d\n", file, line);
 	return NULL;
 }
 
