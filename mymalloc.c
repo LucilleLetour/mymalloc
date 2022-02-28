@@ -5,8 +5,10 @@
 
 static char memory[MEMSIZE];
 
+// Enum that makes it more idiomatic to set the reserved status of a meta tag (can write `is_reserved = false` instead of `is_reserved = 0`)
 typedef enum {false, true} boolean;
 
+// Meta tag for a chunk of memory. Contains two attributes: the size of the data this chunk has and whether or not that data is free or not
 typedef struct meta {
 	char is_reserved;
 	unsigned short chunk_size;
@@ -21,6 +23,7 @@ void memdump()
 	printf("--------\n");
 }
 
+// Explained in detail in README
 void* mymalloc(size_t p, char* file, int line) {
 	if(p<=0) {
 		printf("ERROR: Tried allocating invalid amount of memory at %s:%d\n", file, line);
@@ -61,6 +64,7 @@ void* mymalloc(size_t p, char* file, int line) {
 	return NULL;
 }
 
+// Explained in detail in README
 void myfree(void* p, char* file, int line)
 {
 	//check for NULL pointer
