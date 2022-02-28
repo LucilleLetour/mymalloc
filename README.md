@@ -32,7 +32,9 @@ Use `malloc()` to get 120 1-byte chunks, storing the pointers in an array, then 
 Randomly allocate a 1-byte chunk and store the pointer in an array or free a recent chunk 120 times
 ### Test4 ###
 Allocating random size byte chunks until failure (running out of availible memory) and freeing the chunks at even then odd location to test coalesce.  
+  
 For this test, it will test the ability of `malloc()` being able to allocate any given and valid amounts of data until failure and test the ability of `free()` of being able to free pointers generally for the even indexed pointers and follow proper coalesce procedure for the odd indexed pointer. The test will complete by allocating the maximum amount available which is MEMSIZE - sizeof(meta) and freeing that pointer. If the test fails, it means that the free procedure during the odd indexed pointers failed and thus coalesce did not function properly. 
 ### Test5 ###
 Allocating a maximum amount of 1-byte chunks and randomly freeing until the entire memory is empty  
+  
 For this test, it will test the ability of `malloc()` being able to allocate a maximum amount of 1-byte chunks until failure and test the ability of `free()` of being able to free pointers randomly for the entire memory. The test will complete by allocating the maximum amount available which is MEMSIZE - sizeof(meta) and freeing that pointer. If the test fails, it means that the free procedure of randomly freeing all the pointers failed and that certain edge cases of free were not accounted for. 
