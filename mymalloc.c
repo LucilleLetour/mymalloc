@@ -34,6 +34,12 @@ void memdump()
 void* mymalloc(size_t p, char* file, int line) {
 	//printf(__FILE__ " at line: %d\n", __LINE__);
 	// Goal: find first available free chunk with adequate size
+	if(p<=0)
+	{
+		printf("ERROR: Tried allocating invalid amount of memory %s:%d\n", file, line);
+		return NULL;
+	}
+
 	int curLoc = 0;
 	meta* metaBlock = (meta*)&memory[curLoc];
 	if(metaBlock->chunk_size == 0) {
