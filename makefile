@@ -1,16 +1,11 @@
-all: mymalloc.c memgrind.c
-	gcc mymalloc.c -o mymalloc.o
-	gcc memgrind.c -o memgrind.o
-	gcc manutest.c -o manutest.o
+mymalloc: mymalloc.c memgrind.c
+	gcc mymalloc.c memgrind.c -o mymalloc.o
 
-memgrind: memgrind.c
-	gcc memgrind.c -o memgrind.o
+memgrind: mymalloc.c memgrind.c
+	gcc mymalloc.c memgrind.c -o memgrind.o
 
-mymalloc: mymalloc.c
-	gcc memgrind.c -o memgrind.o
-
-mymalloc: manutest.c
-	gcc manutest.c -o manutest.o
+manutest: mymalloc.c manutest.c
+	gcc mymalloc.c manutest.c -o manutest.o
 
 .PHONY: clean
 clean:
